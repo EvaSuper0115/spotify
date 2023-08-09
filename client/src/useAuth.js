@@ -13,8 +13,9 @@ export default function useAuth(code) {
         console.log(res.data);
         window.history.pushState({}, null, "/");
       })
-      .catch(() => {
-        window.location = "/";
+      .catch((err) => {
+        //window.location = "/";
+        console.log(err);
       });
   }, [code]);
 }
