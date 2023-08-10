@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.post("/login", (req, res) => {
   const code = req.body.code;
   const spotifyApi = new SpotifyWebApi({
-    redirectUri: "http://localhost:8888/callback",
+    redirectUri: "http://localhost:3000/",
     clientId: "625a81e04da040f08e7974a7487b85b2",
     clientSecret: "05a358ab6bb248728320395a90275d64",
   });
