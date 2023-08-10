@@ -21,6 +21,19 @@ export default function useAuth(code) {
       });
   }, [code]);
 
-  useEffect(() => {}, [refreshToken, expiresIn]);
+  useEffect(() => {
+    axios
+      .post("http://localhost:3001/refresh", { refreshToken })
+      .then((res) => {
+        //setAccessToken(res.data.accessToken);
+        //setRefreshToken(res.data.refreshToken);
+        //setExpiresIn(res.data.expiresIn);
+        //window.history.pushState({}, null, "/");
+      })
+      .catch((err) => {
+        //window.location = "/";
+        console.log(err);
+      });
+  }, [refreshToken, expiresIn]);
   return accessToken;
 }
