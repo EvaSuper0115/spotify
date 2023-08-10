@@ -11,6 +11,9 @@ export default function useAuth(code) {
       .post("http://localhost:3001/login", { code })
       .then((res) => {
         console.log(res.data);
+        setAccessToken(res.data.accessToken);
+        setRequestToken(res.data.requestToken);
+        setExpiresIn(res.data.expiresIn);
         window.history.pushState({}, null, "/");
       })
       .catch((err) => {
@@ -18,4 +21,5 @@ export default function useAuth(code) {
         console.log(err);
       });
   }, [code]);
+  return accessToken;
 }
