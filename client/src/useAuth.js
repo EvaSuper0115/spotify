@@ -23,6 +23,7 @@ export default function useAuth(code) {
   }, [code]);
 
   useEffect(() => {
+    if (!refreshToken || !expiresIn) return;
     axios
       .post("http://localhost:3001/refresh", { refreshToken })
       .then((res) => {
