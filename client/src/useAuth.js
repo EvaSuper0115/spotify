@@ -10,6 +10,7 @@ export default function useAuth(code) {
     axios
       .post("http://localhost:3001/login", { code })
       .then((res) => {
+        console.log(res.data);
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
         setExpiresIn(res.data.expiresIn);
@@ -25,10 +26,9 @@ export default function useAuth(code) {
     axios
       .post("http://localhost:3001/refresh", { refreshToken })
       .then((res) => {
-        //setAccessToken(res.data.accessToken);
-        //setRefreshToken(res.data.refreshToken);
-        //setExpiresIn(res.data.expiresIn);
-        //window.history.pushState({}, null, "/");
+        // set refresh token as our new access token and get new expires in
+        setAccessToken(res.data.accessToken);
+        setExpiresIn(res.data.expiresIn);
       })
       .catch((err) => {
         //window.location = "/";
