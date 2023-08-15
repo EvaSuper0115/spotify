@@ -9,7 +9,7 @@ export default function Dashboard({ code }) {
   return (
     <Container className="searchFormContainer">
       <Form.Control
-        autoFocus="true"
+        autoFocus={true}
         className="searchForm"
         type="search"
         placeholder="search BTS music by genre, mood or album etc."
