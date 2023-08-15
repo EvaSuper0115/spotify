@@ -3,6 +3,7 @@ import { useState } from "react";
 import useAuth from "./useAuth";
 import { Container, Form } from "react-bootstrap";
 import "./searchForm.css";
+import SpotifyWebApi from "spotify-web-api-node";
 export default function Dashboard({ code }) {
   //https://open.spotify.com/artist/3Nrfpe0tUJi4K4DXYWgMUX
   //Spotify ID of BTS is 3Nrfpe0tUJi4K4DXYWgMUX
@@ -18,8 +19,8 @@ export default function Dashboard({ code }) {
   return (
     <Container className="searchFormContainer">
       <Form.Control
-        autoFocus={true}
         className="searchForm"
+        autoFocus={true}
         type="search"
         placeholder="search BTS music by genre, mood or album etc."
         value={search}
