@@ -49,7 +49,7 @@ export default function Dashboard({ code }) {
       .getArtist(JiminSpotifyId)
       .then((res) => {
         console.log(res.body);
-        setJiminImage(res.body.images[0]);
+        setJiminImage(res.body.images[0].url);
       })
       .catch((err) => {
         console.log(err);
@@ -66,7 +66,7 @@ export default function Dashboard({ code }) {
         onChange={(keyword) => setSearch(keyword.target.value)}
       />
       <Button onClick={getJimin}>Jimin</Button>
-      <div>{jiminImage}</div>
+      {jiminImage && <img src={jiminImage}></img>}
     </Container>
   );
 }
