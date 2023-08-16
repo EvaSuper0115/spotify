@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import useAuth from "./useAuth";
-import { Container, Form } from "react-bootstrap";
+import { Button, Container, Form } from "react-bootstrap";
 import "./searchForm.css";
 import SpotifyWebApi from "spotify-web-api-node";
 const spotifyApi = new SpotifyWebApi({
@@ -14,6 +14,7 @@ export default function Dashboard({ code }) {
   //Spotify ID RM is 2auC28zjQyVTsiZKNgPRGs
   //Spotify ID JHope is 0b1sIQumIAsNbqAoIClSpy
   //Spotify ID Suga/Agust D is 5RmQ8k4l3HZ8JoPb4mNsML
+  const JiminSpotifyId = "1oSPZhvZMIrWW5I41kPkkY";
   //Spotify ID Jimin is 1oSPZhvZMIrWW5I41kPkkY
   //Spotify ID V is 3JsHnjpbhX4SnySpvpa9DK
   //Spotify ID Jungkook is 6HaGTQPmzraVmaVxvz6EUc
@@ -22,7 +23,7 @@ export default function Dashboard({ code }) {
 
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-
+  const [jiminImage, setJiminImage] = useState(null);
   useEffect(() => {
     //only set access token if we have one, if we don't have, exit
     if (!accessToken) return;
@@ -43,7 +44,17 @@ export default function Dashboard({ code }) {
         console.log(err);
       });
   }, [search, accessToken]);
-
+  const getJimin = () => {
+    spotifyApi
+      .getArtist(JiminSpotifyId)
+      .then((res) => {
+        console.log(res.body);
+        setJiminImage(res.body.images[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <Container className="searchFormContainer">
       <Form.Control
@@ -54,6 +65,8 @@ export default function Dashboard({ code }) {
         value={search}
         onChange={(keyword) => setSearch(keyword.target.value)}
       />
+      <Button onClick={getJimin}>Jimin</Button>
+      <div>{jiminImage}</div>
     </Container>
   );
 }
