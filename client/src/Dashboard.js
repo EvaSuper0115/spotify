@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import useAuth from "./useAuth";
 import { Container, Form } from "react-bootstrap";
 import "./searchForm.css";
@@ -8,6 +7,7 @@ const spotifyApi = new SpotifyWebApi({
   clientId: "625a81e04da040f08e7974a7487b85b2",
 });
 export default function Dashboard({ code }) {
+  const BtsSpotifyId = "3Nrfpe0tUJi4K4DXYWgMUX";
   //https://open.spotify.com/artist/3Nrfpe0tUJi4K4DXYWgMUX
   //Spotify ID of BTS is 3Nrfpe0tUJi4K4DXYWgMUX
   //Spotify ID Jin is 5vV3bFXnN6D6N3Nj4xRvaV
@@ -19,6 +19,7 @@ export default function Dashboard({ code }) {
   //Spotify ID Jungkook is 6HaGTQPmzraVmaVxvz6EUc
 
   const accessToken = useAuth(code);
+
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
 
@@ -32,6 +33,7 @@ export default function Dashboard({ code }) {
     if (!search) return;
     setSearchResult([]);
     if (!accessToken) return;
+
     spotifyApi
       .searchTracks(search)
       .then((res) => {
