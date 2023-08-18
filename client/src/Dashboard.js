@@ -67,8 +67,15 @@ export default function Dashboard({ code }) {
     },
   ];
 
-  const getArtist = (member) => {
-    spotifyApi.getArtist(member.spotifyId);
+  const getArtist = (spotifyId) => {
+    spotifyApi
+      .getArtist(spotifyId)
+      .then((res) => {
+        console.log(res.body);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -82,7 +89,7 @@ export default function Dashboard({ code }) {
         onChange={(keyword) => setSearch(keyword.target.value)}
       />
       {members.map((member, index) => (
-        <Button key={index} onClick={getArtist}>
+        <Button key={index} onClick={() => getArtist(member.spotifyId)}>
           {member.name}
         </Button>
       ))}
