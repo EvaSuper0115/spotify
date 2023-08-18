@@ -15,8 +15,7 @@ export default function Dashboard({ code }) {
 
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-  const [jiminImage, setJiminImage] = useState(null);
-  const [artistDetails, setArtistDetails] = useState(BtsSpotifyId);
+  const [artistDetails, setArtistDetails] = useState(null);
   useEffect(() => {
     //only set access token if we have one, if we don't have, exit
     if (!accessToken) return;
@@ -36,6 +35,10 @@ export default function Dashboard({ code }) {
         console.log(err);
       });
   }, [search, accessToken]);
+
+  useEffect(() => {
+    console.log(artistDetails);
+  }, [artistDetails, accessToken]);
   const members = [
     {
       name: "RM",
@@ -50,7 +53,7 @@ export default function Dashboard({ code }) {
       spotifyId: "5RmQ8k4l3HZ8JoPb4mNsML",
     },
     {
-      name: "Jhope",
+      name: "j-hope",
       spotifyId: "0b1sIQumIAsNbqAoIClSpy",
     },
     {
@@ -62,7 +65,7 @@ export default function Dashboard({ code }) {
       spotifyId: "3JsHnjpbhX4SnySpvpa9DK",
     },
     {
-      name: "Jungkook",
+      name: "Jung Kook",
       spotifyId: "6HaGTQPmzraVmaVxvz6EUc",
     },
   ];
@@ -71,7 +74,7 @@ export default function Dashboard({ code }) {
     spotifyApi
       .getArtist(spotifyId)
       .then((res) => {
-        console.log(res.body);
+        setArtistDetails(res.body);
       })
       .catch((err) => {
         console.log(err);
@@ -95,7 +98,6 @@ export default function Dashboard({ code }) {
       ))}
 
       <ArtistInfo artistDetails={artistDetails} />
-      {jiminImage && <img src={jiminImage}></img>}
     </Container>
   );
 }
