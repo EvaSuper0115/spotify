@@ -96,8 +96,7 @@ export default function Dashboard({ code }) {
           {member.name}
         </Button>
       ))}
-
-      <ArtistInfo artistDetails={artistDetails} />
+      {artistDetails && <ArtistInfo artistDetails={artistDetails} />}
     </Container>
   );
 }

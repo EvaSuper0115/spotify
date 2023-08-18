@@ -1,5 +1,5 @@
 import React from "react";
-
-export default function ArtistInfo() {
-  return <div></div>;
+import "./artistInfo.css";
+export default function ArtistInfo({ artistDetails }) {
+  return <div className="artistInfoSection">{artistDetails.name}</div>;
 }
