@@ -3,13 +3,14 @@ import useAuth from "./useAuth";
 import { Button, Container, Form } from "react-bootstrap";
 import "./searchForm.css";
 import SpotifyWebApi from "spotify-web-api-node";
+import ArtistInfo from "./ArtistInfo";
 const spotifyApi = new SpotifyWebApi({
   clientId: "625a81e04da040f08e7974a7487b85b2",
 });
 export default function Dashboard({ code }) {
-  const BtsSpotifyId = "3Nrfpe0tUJi4K4DXYWgMUX";
   //https://open.spotify.com/artist/3Nrfpe0tUJi4K4DXYWgMUX
   //Spotify ID of BTS is 3Nrfpe0tUJi4K4DXYWgMUX
+  const BtsSpotifyId = "3Nrfpe0tUJi4K4DXYWgMUX";
   //Spotify ID Jin is 5vV3bFXnN6D6N3Nj4xRvaV
   //Spotify ID RM is 2auC28zjQyVTsiZKNgPRGs
   //Spotify ID JHope is 0b1sIQumIAsNbqAoIClSpy
@@ -24,6 +25,7 @@ export default function Dashboard({ code }) {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [jiminImage, setJiminImage] = useState(null);
+  const [artistDetails, setArtistDetails] = useState(BtsSpotifyId);
   useEffect(() => {
     //only set access token if we have one, if we don't have, exit
     if (!accessToken) return;
@@ -34,7 +36,6 @@ export default function Dashboard({ code }) {
     if (!search) return;
     setSearchResult([]);
     if (!accessToken) return;
-
     spotifyApi
       .searchTracks(search)
       .then((res) => {
@@ -44,17 +45,8 @@ export default function Dashboard({ code }) {
         console.log(err);
       });
   }, [search, accessToken]);
-  const getJimin = () => {
-    spotifyApi
-      .getArtist(JiminSpotifyId)
-      .then((res) => {
-        console.log(res.body);
-        setJiminImage(res.body.images[0].url);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const members = ["RM", "Jin", "Suga", "jhope", "Jimin", "V", "Jungkook"];
+
   return (
     <Container className="searchFormContainer">
       <Form.Control
@@ -65,7 +57,11 @@ export default function Dashboard({ code }) {
         value={search}
         onChange={(keyword) => setSearch(keyword.target.value)}
       />
-      <Button onClick={getJimin}>Jimin</Button>
+      {members.map((name, index) => (
+        <Button key={index}>{name}</Button>
+      ))}
+
+      <ArtistInfo artistDetails={artistDetails} />
       {jiminImage && <img src={jiminImage}></img>}
     </Container>
   );
