@@ -9,16 +9,7 @@ const spotifyApi = new SpotifyWebApi({
 });
 export default function Dashboard({ code }) {
   //https://open.spotify.com/artist/3Nrfpe0tUJi4K4DXYWgMUX
-  //Spotify ID of BTS is 3Nrfpe0tUJi4K4DXYWgMUX
   const BtsSpotifyId = "3Nrfpe0tUJi4K4DXYWgMUX";
-  //Spotify ID Jin is 5vV3bFXnN6D6N3Nj4xRvaV
-  //Spotify ID RM is 2auC28zjQyVTsiZKNgPRGs
-  //Spotify ID JHope is 0b1sIQumIAsNbqAoIClSpy
-  //Spotify ID Suga/Agust D is 5RmQ8k4l3HZ8JoPb4mNsML
-  const JiminSpotifyId = "1oSPZhvZMIrWW5I41kPkkY";
-  //Spotify ID Jimin is 1oSPZhvZMIrWW5I41kPkkY
-  //Spotify ID V is 3JsHnjpbhX4SnySpvpa9DK
-  //Spotify ID Jungkook is 6HaGTQPmzraVmaVxvz6EUc
 
   const accessToken = useAuth(code);
 
@@ -45,7 +36,40 @@ export default function Dashboard({ code }) {
         console.log(err);
       });
   }, [search, accessToken]);
-  const members = ["RM", "Jin", "Suga", "jhope", "Jimin", "V", "Jungkook"];
+  const members = [
+    {
+      name: "RM",
+      spotifyId: "2auC28zjQyVTsiZKNgPRGs",
+    },
+    {
+      name: "Jin",
+      spotifyId: "5vV3bFXnN6D6N3Nj4xRvaV",
+    },
+    {
+      name: "Suga",
+      spotifyId: "5RmQ8k4l3HZ8JoPb4mNsML",
+    },
+    {
+      name: "Jhope",
+      spotifyId: "0b1sIQumIAsNbqAoIClSpy",
+    },
+    {
+      name: "Jimin",
+      spotifyId: "1oSPZhvZMIrWW5I41kPkkY",
+    },
+    {
+      name: "V",
+      spotifyId: "3JsHnjpbhX4SnySpvpa9DK",
+    },
+    {
+      name: "Jungkook",
+      spotifyId: "6HaGTQPmzraVmaVxvz6EUc",
+    },
+  ];
+
+  const getArtist = (member) => {
+    spotifyApi.getArtist(member.spotifyId);
+  };
 
   return (
     <Container className="searchFormContainer">
@@ -57,8 +81,10 @@ export default function Dashboard({ code }) {
         value={search}
         onChange={(keyword) => setSearch(keyword.target.value)}
       />
-      {members.map((name, index) => (
-        <Button key={index}>{name}</Button>
+      {members.map((member, index) => (
+        <Button key={index} onClick={getArtist}>
+          {member.name}
+        </Button>
       ))}
 
       <ArtistInfo artistDetails={artistDetails} />
