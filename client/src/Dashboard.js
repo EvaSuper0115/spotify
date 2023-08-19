@@ -4,6 +4,7 @@ import { Button, Container, Form } from "react-bootstrap";
 import "./searchForm.css";
 import SpotifyWebApi from "spotify-web-api-node";
 import ArtistInfo from "./ArtistInfo";
+import ArtistTracks from "./ArtistTracks";
 const spotifyApi = new SpotifyWebApi({
   clientId: "625a81e04da040f08e7974a7487b85b2",
 });
@@ -16,6 +17,7 @@ export default function Dashboard({ code }) {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [artistDetails, setArtistDetails] = useState(null);
+  const [artistTopTracks, setArtistTopTracks] = useState(null);
   useEffect(() => {
     //only set access token if we have one, if we don't have, exit
     if (!accessToken) return;
@@ -71,10 +73,20 @@ export default function Dashboard({ code }) {
   ];
 
   const getArtist = (spotifyId) => {
+    //get artist's info and status
     spotifyApi
       .getArtist(spotifyId)
       .then((res) => {
         setArtistDetails(res.body);
+        // get artist top tracks here
+        spotifyApi.getArtistTopTracks(spotifyId, "US").then((topTracksRes) => {
+          console.log(topTracksRes.body);
+          setArtistTopTracks(topTracksRes.body);
+          //get artist albums here
+          spotifyApi.getArtistAlbums(spotifyId).then((artistAlbumsRes) => {
+            console.log(artistAlbumsRes.body);
+          });
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -97,6 +109,7 @@ export default function Dashboard({ code }) {
         </Button>
       ))}
       {artistDetails && <ArtistInfo artistDetails={artistDetails} />}
+      {artistTopTracks && <ArtistTracks artistTopTracks={artistTopTracks} />}
     </Container>
   );
 }
