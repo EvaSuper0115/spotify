@@ -1,4 +1,13 @@
 .artistInfoSection {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
+  border-radius: 10px;
+  color: whitesmoke;
+}
+.artistStatus {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column-reverse;
+  font-size: 3vh;
+  list-style: none;
 }
