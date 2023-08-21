@@ -80,7 +80,6 @@ export default function Dashboard({ code }) {
         setArtistDetails(res.body);
         // get artist top tracks here
         spotifyApi.getArtistTopTracks(spotifyId, "US").then((topTracksRes) => {
-          console.log(topTracksRes.body);
           setArtistTopTracks(topTracksRes.body.tracks);
           //get artist albums here
           spotifyApi.getArtistAlbums(spotifyId).then((artistAlbumsRes) => {
