@@ -43,6 +43,7 @@ export default function Dashboard({ code }) {
   }, [search, accessToken]);
   //load automatically BTS info when logged in, Promise.all to make sure they are synchronous
   const getBandInfo = () => {
+    if (!accessToken) return;
     if (accessToken) {
       Promise.all([
         spotifyApi.getArtist(BtsSpotifyId),

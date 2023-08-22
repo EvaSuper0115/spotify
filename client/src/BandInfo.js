@@ -5,6 +5,9 @@ export default function BandInfo({ bandData }) {
   const bandInfo = bandData.bandInfo;
   const bandTopTracks = bandData.bandTopTracks;
   const bandAlbums = bandData.bandAlbums;
+  if (!bandData) {
+    return <div></div>;
+  }
   return (
     <div>
       <h1>{bandInfo.name}</h1>
