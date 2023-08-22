@@ -3,6 +3,7 @@ import useAuth from "./useAuth";
 import { Button, Container, Form } from "react-bootstrap";
 import "./searchForm.css";
 import SpotifyWebApi from "spotify-web-api-node";
+import BandInfo from "./BandInfo";
 import ArtistInfo from "./ArtistInfo";
 import ArtistTracks from "./ArtistTracks";
 const spotifyApi = new SpotifyWebApi({
@@ -16,6 +17,7 @@ export default function Dashboard({ code }) {
 
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [bandInfo, setBandInfo] = useState([]);
   const [artistDetails, setArtistDetails] = useState(null);
   const [artistTopTracks, setArtistTopTracks] = useState(null);
   useEffect(() => {
@@ -37,10 +39,22 @@ export default function Dashboard({ code }) {
         console.log(err);
       });
   }, [search, accessToken]);
+  //load automatically BTS info when logged in
+  const getBandInfo = () => {
+    spotifyApi
+      .getArtist(BtsSpotifyId)
+      .then((res) => {
+        setBandInfo(res.body);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
-    console.log(artistDetails);
-  }, [artistDetails, accessToken]);
+    getBandInfo();
+  }, [accessToken]);
+
   const members = [
     {
       name: "RM",
@@ -94,6 +108,7 @@ export default function Dashboard({ code }) {
 
   return (
     <Container className="searchFormContainer">
+      {accessToken && <BandInfo bandInfo={bandInfo} />}
       <Form.Control
         autoFocus={true}
         className="searchForm"

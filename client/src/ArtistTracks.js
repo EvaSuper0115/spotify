@@ -5,7 +5,7 @@ export default function ArtistTracks({ artistTopTracks }) {
 
   return (
     <div>
-      <h2>his top 5 songs</h2>
+      <h2>Top 5 songs</h2>
       {artistTopTracks.slice(0, 5).map((track, index) => (
         <div key={index}>
           <img src={track.album.images[2].url} alt="Track Album" />
