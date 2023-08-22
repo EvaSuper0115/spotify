@@ -18,6 +18,8 @@ export default function Dashboard({ code }) {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [bandInfo, setBandInfo] = useState([]);
+  const [bandTopTracks, setBandTopTracks] = useState([]);
+  const [bandAlbums, setBandAlbums] = useState([]);
   const [artistDetails, setArtistDetails] = useState(null);
   const [artistTopTracks, setArtistTopTracks] = useState(null);
   useEffect(() => {
@@ -39,16 +41,23 @@ export default function Dashboard({ code }) {
         console.log(err);
       });
   }, [search, accessToken]);
-  //load automatically BTS info when logged in
+  //load automatically BTS info when logged in, Promise.all to make sure they are synchronous
   const getBandInfo = () => {
-    spotifyApi
-      .getArtist(BtsSpotifyId)
-      .then((res) => {
-        setBandInfo(res.body);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (accessToken) {
+      Promise.all([
+        spotifyApi.getArtist(BtsSpotifyId),
+        spotifyApi.getArtistTopTracks(BtsSpotifyId, "US"),
+        spotifyApi.getArtistAlbums(BtsSpotifyId),
+      ])
+        .then(([artistRes, topTracksRes, albumRes]) => {
+          setBandInfo(artistRes.body);
+          setBandTopTracks(topTracksRes.body);
+          setBandAlbums(albumRes.body);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   useEffect(() => {
@@ -108,7 +117,15 @@ export default function Dashboard({ code }) {
 
   return (
     <Container className="searchFormContainer">
-      {accessToken && <BandInfo bandInfo={bandInfo} />}
+      {accessToken && (
+        <BandInfo
+          bandData={{
+            bandInfo: bandInfo,
+            bandTopTracks: bandTopTracks,
+            bandAlbums: bandAlbums,
+          }}
+        />
+      )}
       <Form.Control
         autoFocus={true}
         className="searchForm"
