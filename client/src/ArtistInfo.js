@@ -3,7 +3,7 @@ import "./artistInfo.css";
 export default function ArtistInfo({ artistData }) {
   const artistDetails = artistData.artistDetails;
   const artistTopTracks = artistData.artistTopTracks.tracks;
-  const artistAlbums = artistData.artistAlbums;
+  const artistAlbums = artistData.artistAlbums.items;
   console.log(artistDetails);
   console.log(artistTopTracks);
   console.log(artistAlbums);
@@ -27,8 +27,8 @@ export default function ArtistInfo({ artistData }) {
         </div>
       </div>
       <div className="artistTracksSection">
-        <h2>Top 5 songs</h2>
-        {artistTopTracks.slice(0, 5).map((track, index) => (
+        <h2>Top 10 Songs</h2>
+        {artistTopTracks.slice(0, 10).map((track, index) => (
           <div key={index}>
             <img src={track.album.images[2].url} alt="Track Album" />
             {track.name} release : {track.album.release_date}
@@ -36,8 +36,17 @@ export default function ArtistInfo({ artistData }) {
           </div>
         ))}
       </div>
+      <h2>Featured Albums</h2>
       <div className="artistAlbumsSection">
-        <h2>Albums</h2>
+        {artistAlbums.map((album, index) => (
+          <div key={index}>
+            <a href={album.uri}>
+              <img src={album.images[1].url} alt="album-image" />
+            </a>
+            <p>{album.name}</p>
+            <p>{album.release_date}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
