@@ -4,9 +4,7 @@ export default function ArtistInfo({ artistData }) {
   const artistDetails = artistData.artistDetails;
   const artistTopTracks = artistData.artistTopTracks.tracks;
   const artistAlbums = artistData.artistAlbums.items;
-  console.log(artistDetails);
-  console.log(artistTopTracks);
-  console.log(artistAlbums);
+
   const backgroundImageStyle = {
     backgroundImage: `url(${artistDetails.images[0].url})`,
     backgroundSize: "cover",
@@ -27,7 +25,7 @@ export default function ArtistInfo({ artistData }) {
         </div>
       </div>
       <div className="artistTracksSection">
-        <h2>Top 10 Songs</h2>
+        <h2>Top Songs</h2>
         {artistTopTracks.slice(0, 10).map((track, index) => (
           <div key={index}>
             <img src={track.album.images[2].url} alt="Track Album" />

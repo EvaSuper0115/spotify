@@ -62,10 +62,12 @@ export default function Dashboard({ code }) {
     if (!search) return;
     setSearchResult([]);
     if (!accessToken) return;
+    const searchTermwithBts = "bts" + search;
     spotifyApi
-      .searchTracks(search)
+      .searchTracks(searchTermwithBts)
       .then((res) => {
         console.log(res.body);
+        setSearchResult(res.body.items);
       })
       .catch((err) => {
         console.log(err);
@@ -109,6 +111,13 @@ export default function Dashboard({ code }) {
         value={search}
         onChange={(keyword) => setSearch(keyword.target.value)}
       />
+
+      {searchResult.map((result, index) => (
+        <div key={index}>
+          <img src={result.album.images[2].url} alt="track-image" />
+          <p>{result.name}</p>
+        </div>
+      ))}
       {members.map((member, index) => (
         <Button key={index} onClick={() => getArtist(member.spotifyId)}>
           {member.name}
