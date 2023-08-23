@@ -15,7 +15,7 @@ export default function Dashboard({ code }) {
 
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-
+  const [loaded, setLoaded] = useState(false);
   const [artistDetails, setArtistDetails] = useState(null);
   const [artistTopTracks, setArtistTopTracks] = useState(null);
   const [artistAlbums, setArtistAlbums] = useState(null);
@@ -55,6 +55,7 @@ export default function Dashboard({ code }) {
     //only set access token if we have one, if we don't have, exit
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
+    setLoaded(true);
   }, [accessToken]);
 
   useEffect(() => {
@@ -71,8 +72,10 @@ export default function Dashboard({ code }) {
       });
   }, [search, accessToken]);
   // Promise.all to make sure they are synchronous
+
   const getArtist = (spotifyId) => {
     if (!accessToken) return;
+    setLoaded(false);
     if (accessToken) {
       Promise.all([
         //get artist's info and status
@@ -92,6 +95,9 @@ export default function Dashboard({ code }) {
         });
     }
   };
+  if (loaded && accessToken) {
+    getArtist("3Nrfpe0tUJi4K4DXYWgMUX");
+  }
 
   return (
     <Container className="searchFormContainer">
