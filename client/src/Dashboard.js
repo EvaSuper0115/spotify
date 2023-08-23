@@ -3,69 +3,24 @@ import useAuth from "./useAuth";
 import { Button, Container, Form } from "react-bootstrap";
 import "./searchForm.css";
 import SpotifyWebApi from "spotify-web-api-node";
-import BandInfo from "./BandInfo";
 import ArtistInfo from "./ArtistInfo";
-import ArtistTracks from "./ArtistTracks";
+
 const spotifyApi = new SpotifyWebApi({
   clientId: "625a81e04da040f08e7974a7487b85b2",
 });
 export default function Dashboard({ code }) {
   //https://open.spotify.com/artist/3Nrfpe0tUJi4K4DXYWgMUX
-  const BtsSpotifyId = "3Nrfpe0tUJi4K4DXYWgMUX";
 
   const accessToken = useAuth(code);
 
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-  const [bandInfo, setBandInfo] = useState([]);
-  const [bandTopTracks, setBandTopTracks] = useState([]);
-  const [bandAlbums, setBandAlbums] = useState([]);
+
   const [artistDetails, setArtistDetails] = useState(null);
   const [artistTopTracks, setArtistTopTracks] = useState(null);
-  useEffect(() => {
-    //only set access token if we have one, if we don't have, exit
-    if (!accessToken) return;
-    spotifyApi.setAccessToken(accessToken);
-  }, [accessToken]);
-
-  useEffect(() => {
-    if (!search) return;
-    setSearchResult([]);
-    if (!accessToken) return;
-    spotifyApi
-      .searchTracks(search)
-      .then((res) => {
-        console.log(res.body);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [search, accessToken]);
-  //load automatically BTS info when logged in, Promise.all to make sure they are synchronous
-  const getBandInfo = () => {
-    if (!accessToken) return;
-    if (accessToken) {
-      Promise.all([
-        spotifyApi.getArtist(BtsSpotifyId),
-        spotifyApi.getArtistTopTracks(BtsSpotifyId, "US"),
-        spotifyApi.getArtistAlbums(BtsSpotifyId),
-      ])
-        .then(([artistRes, topTracksRes, albumRes]) => {
-          setBandInfo(artistRes.body);
-          setBandTopTracks(topTracksRes.body);
-          setBandAlbums(albumRes.body);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-
-  useEffect(() => {
-    getBandInfo();
-  }, [accessToken]);
-
+  const [artistAlbums, setArtistAlbums] = useState(null);
   const members = [
+    { name: "BTS", spotifyId: "3Nrfpe0tUJi4K4DXYWgMUX" },
     {
       name: "RM",
       spotifyId: "2auC28zjQyVTsiZKNgPRGs",
@@ -96,37 +51,50 @@ export default function Dashboard({ code }) {
     },
   ];
 
-  const getArtist = (spotifyId) => {
-    //get artist's info and status
+  useEffect(() => {
+    //only set access token if we have one, if we don't have, exit
+    if (!accessToken) return;
+    spotifyApi.setAccessToken(accessToken);
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (!search) return;
+    setSearchResult([]);
+    if (!accessToken) return;
     spotifyApi
-      .getArtist(spotifyId)
+      .searchTracks(search)
       .then((res) => {
-        setArtistDetails(res.body);
-        // get artist top tracks here
-        spotifyApi.getArtistTopTracks(spotifyId, "US").then((topTracksRes) => {
-          setArtistTopTracks(topTracksRes.body.tracks);
-          //get artist albums here
-          spotifyApi.getArtistAlbums(spotifyId).then((artistAlbumsRes) => {
-            console.log(artistAlbumsRes.body);
-          });
-        });
+        console.log(res.body);
       })
       .catch((err) => {
         console.log(err);
       });
+  }, [search, accessToken]);
+  // Promise.all to make sure they are synchronous
+  const getArtist = (spotifyId) => {
+    if (!accessToken) return;
+    if (accessToken) {
+      Promise.all([
+        //get artist's info and status
+        spotifyApi.getArtist(spotifyId),
+        // get artist top tracks here
+        spotifyApi.getArtistTopTracks(spotifyId, "US"),
+        //get artist albums here
+        spotifyApi.getArtistAlbums(spotifyId),
+      ])
+        .then(([artistRes, topTracksRes, albumRes]) => {
+          setArtistDetails(artistRes.body);
+          setArtistTopTracks(topTracksRes.body);
+          setArtistAlbums(albumRes.body);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
     <Container className="searchFormContainer">
-      {accessToken && (
-        <BandInfo
-          bandData={{
-            bandInfo: bandInfo,
-            bandTopTracks: bandTopTracks,
-            bandAlbums: bandAlbums,
-          }}
-        />
-      )}
       <Form.Control
         autoFocus={true}
         className="searchForm"
@@ -140,8 +108,15 @@ export default function Dashboard({ code }) {
           {member.name}
         </Button>
       ))}
-      {artistDetails && <ArtistInfo artistDetails={artistDetails} />}
-      {artistTopTracks && <ArtistTracks artistTopTracks={artistTopTracks} />}
+      {artistDetails && (
+        <ArtistInfo
+          artistData={{
+            artistDetails: artistDetails,
+            artistTopTracks: artistTopTracks,
+            artistAlbums: artistAlbums,
+          }}
+        />
+      )}
     </Container>
   );
 }
