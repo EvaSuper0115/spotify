@@ -128,7 +128,10 @@ export default function Dashboard({ code }) {
       </form>
 
       {searchResult.map((item, index) => (
-        <div key={index}>{item.name}</div>
+        <div key={index}>
+          <img src={item.album.images[2].url} alt="album-image" />
+          {item.name}
+        </div>
       ))}
 
       {members.map((member, index) => (
