@@ -115,15 +115,16 @@ export default function Dashboard({ code }) {
 
   return (
     <Container className="searchFormContainer">
-      <form onSubmit={handleSubmit}>
+      <div>search BTS music by genre, mood, album or even fans' covers </div>
+      <form className="searchForm" onSubmit={handleSubmit}>
         <Form.Control
           autoFocus={true}
-          className="searchForm"
           type="search"
-          placeholder="search BTS music by genre, mood or album etc."
+          placeholder="e.g try 'gym', 'study'"
           value={search}
           onChange={(event) => setSearch(event.target.value)}
         />
+
         <button type="submit">search</button>
       </form>
 
