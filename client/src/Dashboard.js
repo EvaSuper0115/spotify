@@ -127,20 +127,20 @@ export default function Dashboard({ code }) {
 
         <button type="submit">search</button>
       </form>
-
       {searchResult.map((item, index) => (
         <div key={index}>
           <img src={item.album.images[2].url} alt="album-image" />
           {item.name}
         </div>
       ))}
-
+      <div>
+        <h1>Members</h1>
+      </div>
       {members.map((member, index) => (
         <Button key={index} onClick={() => getArtist(member.spotifyId)}>
           {member.name}
         </Button>
       ))}
-
       {artistDetails && (
         <ArtistInfo
           artistData={{
