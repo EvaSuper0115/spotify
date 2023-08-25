@@ -58,22 +58,32 @@ export default function Dashboard({ code }) {
     setLoaded(true);
   }, [accessToken]);
 
-  useEffect(() => {
-    if (!search) return;
+  const handleSearch = (keyword) => {
+    if (!keyword) return;
     setSearchResult([]);
     if (!accessToken) return;
-    const searchTermwithBts = "bts" + " " + search;
+
+    const searchTermwithBts = "bts" + " " + keyword;
     spotifyApi
       .searchTracks(searchTermwithBts)
       .then((res) => {
-        console.log(res.body);
-        setSearchResult(res.body.items);
+        console.log(res.body.tracks.items);
+        setSearchResult(res.body.tracks.items);
       })
       .catch((err) => {
         console.log(err);
         window.location = "/";
       });
-  }, [search, accessToken]);
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    handleSearch(search);
+  };
+
+  useEffect(() => {
+    handleSearch(search);
+  }, [accessToken]);
+
   // Promise.all to make sure they are synchronous
 
   const getArtist = (spotifyId) => {
@@ -105,26 +115,28 @@ export default function Dashboard({ code }) {
 
   return (
     <Container className="searchFormContainer">
-      <Form.Control
-        autoFocus={true}
-        className="searchForm"
-        type="search"
-        placeholder="search BTS music by genre, mood or album etc."
-        value={search}
-        onChange={(keyword) => setSearch(keyword.target.value)}
-      />
+      <form onSubmit={handleSubmit}>
+        <Form.Control
+          autoFocus={true}
+          className="searchForm"
+          type="search"
+          placeholder="search BTS music by genre, mood or album etc."
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+        <button type="submit">search</button>
+      </form>
 
-      {searchResult.map((result, index) => (
-        <div key={index}>
-          <img src={result.album.images[2].url} alt="track-image" />
-          <p>{result.name}</p>
-        </div>
+      {searchResult.map((item, index) => (
+        <div key={index}>{item.name}</div>
       ))}
+
       {members.map((member, index) => (
         <Button key={index} onClick={() => getArtist(member.spotifyId)}>
           {member.name}
         </Button>
       ))}
+
       {artistDetails && (
         <ArtistInfo
           artistData={{
