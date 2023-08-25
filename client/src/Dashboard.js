@@ -62,7 +62,7 @@ export default function Dashboard({ code }) {
     if (!search) return;
     setSearchResult([]);
     if (!accessToken) return;
-    const searchTermwithBts = "bts" + search;
+    const searchTermwithBts = "bts" + " " + search;
     spotifyApi
       .searchTracks(searchTermwithBts)
       .then((res) => {
@@ -71,6 +71,7 @@ export default function Dashboard({ code }) {
       })
       .catch((err) => {
         console.log(err);
+        window.location = "/";
       });
   }, [search, accessToken]);
   // Promise.all to make sure they are synchronous
@@ -94,6 +95,7 @@ export default function Dashboard({ code }) {
         })
         .catch((err) => {
           console.log(err);
+          window.location = "/";
         });
     }
   };
