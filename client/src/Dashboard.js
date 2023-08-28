@@ -123,7 +123,7 @@ export default function Dashboard({ code }) {
 
   const playPlaylist = (playlist) => {
     setPlayUri(playlist.uri);
-    console.log(playlist.uri);
+    console.log(playUri);
   };
 
   return (
