@@ -4,6 +4,7 @@ import { Button, Form } from "react-bootstrap";
 import "./App.css";
 import "./searchForm.css";
 import SpotifyWebApi from "spotify-web-api-node";
+
 import ArtistInfo from "./ArtistInfo";
 
 const spotifyApi = new SpotifyWebApi({
@@ -17,6 +18,7 @@ export default function Dashboard({ code }) {
   const [search, setSearch] = useState("");
   const [searchTrackResult, setSearchTrackResult] = useState([]);
   const [searchPlaylistResult, setSearchPlaylistResult] = useState([]);
+  const [playUri, setPlayUri] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [artistDetails, setArtistDetails] = useState(null);
   const [artistTopTracks, setArtistTopTracks] = useState(null);
@@ -119,6 +121,11 @@ export default function Dashboard({ code }) {
     getArtist("3Nrfpe0tUJi4K4DXYWgMUX");
   }
 
+  const playPlaylist = (playlist) => {
+    setPlayUri(playlist.uri);
+    console.log(playlist.uri);
+  };
+
   return (
     <div className="appContainer">
       <div className="searchFormContainer">
@@ -156,7 +163,7 @@ export default function Dashboard({ code }) {
             <h2>Try these playlists</h2>
             <div className="searchedResultGrid">
               {searchPlaylistResult.slice(0, 10).map((item, index) => (
-                <div key={index}>
+                <div key={index} onClick={() => playPlaylist(item)}>
                   <img
                     src={item.images[0].url}
                     alt="playlist-image"
