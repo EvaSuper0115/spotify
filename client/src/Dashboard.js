@@ -127,7 +127,7 @@ export default function Dashboard({ code }) {
           <Form.Control
             autoFocus={true}
             type="search"
-            placeholder="e.g try 'gym', 'study'"
+            placeholder="e.g 'gym', 'dark', 'piano' etc."
             value={search}
             onChange={(event) => setSearch(event.target.value)}
           />
@@ -136,8 +136,8 @@ export default function Dashboard({ code }) {
         </form>
         {searchTrackResult.length > 0 && (
           <div>
-            Try these songs
-            {searchTrackResult.slice(0, 5).map((item, index) => (
+            <h2>Try these songs</h2>
+            {searchTrackResult.slice(0, 10).map((item, index) => (
               <div key={index}>
                 <img
                   src={item.album.images[2].url}
@@ -151,8 +151,8 @@ export default function Dashboard({ code }) {
         )}
         {searchPlaylistResult.length > 0 && (
           <div className="searchedPlaylist">
-            Try these playlists
-            {searchPlaylistResult.slice(0, 5).map((item, index) => (
+            <h2>Try these playlists</h2>
+            {searchPlaylistResult.slice(0, 10).map((item, index) => (
               <div key={index}>
                 <img
                   src={item.images[0].url}

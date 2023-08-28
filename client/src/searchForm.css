@@ -7,4 +7,10 @@
   height: 70px;
   width: 70px;
   padding: 2px;
+  transition: all ease-in-out 0.2s;
+}
+.searchedItem:hover {
+  cursor: pointer;
+  height: 75px;
+  width: 75px;
 }
