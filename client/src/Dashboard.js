@@ -137,31 +137,35 @@ export default function Dashboard({ code }) {
         {searchTrackResult.length > 0 && (
           <div>
             <h2>Try these songs</h2>
-            {searchTrackResult.slice(0, 10).map((item, index) => (
-              <div key={index}>
-                <img
-                  src={item.album.images[2].url}
-                  alt="album-image"
-                  className="searchedItem"
-                />
-                {item.name}
-              </div>
-            ))}
+            <div className="searchedResultGrid">
+              {searchTrackResult.slice(0, 10).map((item, index) => (
+                <div key={index} className="SearchedItemsShown">
+                  <img
+                    src={item.album.images[2].url}
+                    alt="album-image"
+                    className="searchedItem"
+                  />
+                  {item.name}
+                </div>
+              ))}
+            </div>
           </div>
         )}
         {searchPlaylistResult.length > 0 && (
           <div className="searchedPlaylist">
             <h2>Try these playlists</h2>
-            {searchPlaylistResult.slice(0, 10).map((item, index) => (
-              <div key={index}>
-                <img
-                  src={item.images[0].url}
-                  alt="playlist-image"
-                  className="searchedItem"
-                />
-                {item.name}
-              </div>
-            ))}
+            <div className="searchedResultGrid">
+              {searchPlaylistResult.slice(0, 10).map((item, index) => (
+                <div key={index}>
+                  <img
+                    src={item.images[0].url}
+                    alt="playlist-image"
+                    className="searchedItem"
+                  />
+                  {item.name}
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

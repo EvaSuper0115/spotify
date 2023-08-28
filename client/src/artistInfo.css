@@ -16,3 +16,8 @@
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 5px;
 }
+@media (max-width: 550px) {
+  .artistAlbumsSection {
+    grid-template-columns: 1fr;
+  }
+}
