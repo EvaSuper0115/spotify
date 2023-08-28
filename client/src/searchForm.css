@@ -2,3 +2,8 @@
   display: flex !important;
   justify-content: flex-end;
 }
+
+.searchedItem {
+  height: 70px;
+  width: 70px;
+}

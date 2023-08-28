@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useAuth from "./useAuth";
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
+import "./App.css";
 import "./searchForm.css";
 import SpotifyWebApi from "spotify-web-api-node";
 import ArtistInfo from "./ArtistInfo";
@@ -14,7 +15,8 @@ export default function Dashboard({ code }) {
   const accessToken = useAuth(code);
 
   const [search, setSearch] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchTrackResult, setSearchTrackResult] = useState([]);
+  const [searchPlaylistResult, setSearchPlaylistResult] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [artistDetails, setArtistDetails] = useState(null);
   const [artistTopTracks, setArtistTopTracks] = useState(null);
@@ -60,15 +62,19 @@ export default function Dashboard({ code }) {
 
   const handleSearch = (keyword) => {
     if (!keyword) return;
-    setSearchResult([]);
+    setSearchTrackResult([]);
+    setSearchPlaylistResult([]);
     if (!accessToken) return;
 
     const searchTermwithBts = "bts" + " " + keyword;
-    spotifyApi
-      .searchTracks(searchTermwithBts)
-      .then((res) => {
-        console.log(res.body.tracks.items);
-        setSearchResult(res.body.tracks.items);
+    Promise.all([
+      spotifyApi.searchTracks(searchTermwithBts),
+      spotifyApi.searchPlaylists(searchTermwithBts),
+    ])
+      .then(([trackRes, playlistRes]) => {
+        setSearchTrackResult(trackRes.body.tracks.items);
+        setSearchPlaylistResult(playlistRes.body.playlists.items);
+        console.log(playlistRes.body.playlists.items);
       })
       .catch((err) => {
         console.log(err);
@@ -114,28 +120,52 @@ export default function Dashboard({ code }) {
   }
 
   return (
-    <Container className="searchFormContainer">
-      <div>search BTS music by genre, mood, album or even fans' covers </div>
-      <form className="searchForm" onSubmit={handleSubmit}>
-        <Form.Control
-          autoFocus={true}
-          type="search"
-          placeholder="e.g try 'gym', 'study'"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-        />
+    <div className="appContainer">
+      <div className="searchFormContainer">
+        <div>search BTS music by genre, mood, album or even fans' covers </div>
+        <form className="searchForm" onSubmit={handleSubmit}>
+          <Form.Control
+            autoFocus={true}
+            type="search"
+            placeholder="e.g try 'gym', 'study'"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
 
-        <button type="submit">search</button>
-      </form>
-      {searchResult.map((item, index) => (
-        <div key={index}>
-          <img src={item.album.images[2].url} alt="album-image" />
-          {item.name}
-        </div>
-      ))}
-      <div>
-        <h1>Members</h1>
+          <button type="submit">search</button>
+        </form>
+        {searchTrackResult.length > 0 && (
+          <div>
+            Try these songs
+            {searchTrackResult.slice(0, 5).map((item, index) => (
+              <div key={index}>
+                <img
+                  src={item.album.images[2].url}
+                  alt="album-image"
+                  className="searchedItem"
+                />
+                {item.name}
+              </div>
+            ))}
+          </div>
+        )}
+        {searchPlaylistResult.length > 0 && (
+          <div className="searchedPlaylist">
+            Try these playlists
+            {searchPlaylistResult.slice(0, 5).map((item, index) => (
+              <div key={index}>
+                <img
+                  src={item.images[0].url}
+                  alt="playlist-image"
+                  className="searchedItem"
+                />
+                {item.name}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+
       {members.map((member, index) => (
         <Button key={index} onClick={() => getArtist(member.spotifyId)}>
           {member.name}
@@ -150,6 +180,6 @@ export default function Dashboard({ code }) {
           }}
         />
       )}
-    </Container>
+    </div>
   );
 }
